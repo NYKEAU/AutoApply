@@ -1,6 +1,7 @@
 # AutoApply
 
 > Suite locale de suivi et d'automatisation des candidatures d'emploi — middleware Node.js + extension Chrome
+> Outil toujours en cours de développement, non final
 
 AutoApply est un outil 100% local qui te permet de tracker, analyser et automatiser tes candidatures d'emploi. Il se compose d'un middleware (serveur Express + dashboard web) et d'une extension Chrome qui s'intègre directement aux sites d'emploi.
 
