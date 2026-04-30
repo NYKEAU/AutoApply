@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extension Chrome AutoApply</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .extension-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .extension-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .extension-header h1 {
+        color: var(--primary-color);
+        margin-bottom: 10px;
+      }
+
+      .extension-content {
+        background-color: var(--card-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 30px;
+        margin-bottom: 30px;
+      }
+
+      .extension-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .extension-feature {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .extension-feature i {
+        font-size: 36px;
+        color: var(--accent-color);
+        margin-bottom: 15px;
+      }
+
+      .installation-steps {
+        margin-top: 30px;
+      }
+
+      .installation-steps ol {
+        padding-left: 20px;
+      }
+
+      .installation-steps li {
+        margin-bottom: 15px;
+        line-height: 1.6;
+      }
+
+      .installation-steps img {
+        max-width: 100%;
+        border-radius: var(--border-radius);
+        margin: 15px 0;
+        box-shadow: var(--shadow);
+      }
+
+      .download-section {
+        text-align: center;
+        margin: 40px 0;
+      }
+
+      .download-button {
+        display: inline-block;
+        background-color: var(--accent-color);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 30px;
+        font-size: 18px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: var(--transition);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .download-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+      }
+
+      .download-button i {
+        margin-right: 10px;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: var(--accent-color);
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="extension-container">
+      <div class="extension-header">
+        <h1><i class="fas fa-puzzle-piece"></i> Extension Chrome AutoApply</h1>
+        <p>Capturez automatiquement les informations des offres d'emploi</p>
+      </div>
+
+      <div class="extension-content">
+        <h2>Qu'est-ce que l'extension AutoApply ?</h2>
+        <p>
+          L'extension Chrome AutoApply est un outil puissant qui vous permet de
+          capturer automatiquement les informations des offres d'emploi que vous
+          consultez sur les sites de recrutement populaires comme LinkedIn,
+          Indeed, Welcome to the Jungle, et bien d'autres.
+        </p>
+
+        <div class="extension-features">
+          <div class="extension-feature">
+            <i class="fas fa-bolt"></i>
+            <h3>Capture rapide</h3>
+            <p>Capturez les informations en un seul clic</p>
+          </div>
+          <div class="extension-feature">
+            <i class="fas fa-sync-alt"></i>
+            <h3>Synchronisation</h3>
+            <p>Synchronisation automatique avec votre tableau de bord</p>
+          </div>
+          <div class="extension-feature">
+            <i class="fas fa-globe"></i>
+            <h3>Compatible</h3>
+            <p>Fonctionne sur la plupart des sites d'emploi</p>
+          </div>
+        </div>
+
+        <div class="download-section">
+          <a href="autoapply-extension.crx" class="download-button" download>
+            <i class="fas fa-download"></i> Télécharger l'extension
+          </a>
+        </div>
+
+        <div class="installation-steps">
+          <h2>Comment installer l'extension</h2>
+          <ol>
+            <li>
+              Téléchargez le fichier <strong>autoapply-extension.crx</strong> en
+              cliquant sur le bouton ci-dessus.
+            </li>
+            <li>
+              Ouvrez Chrome et accédez à <code>chrome://extensions/</code> en
+              tapant cette adresse dans la barre d'URL.
+            </li>
+            <li>
+              Activez le <strong>Mode développeur</strong> en cliquant sur le
+              bouton situé en haut à droite de la page.
+            </li>
+            <li>
+              Glissez-déposez le fichier
+              <strong>autoapply-extension.crx</strong> téléchargé dans la
+              fenêtre des extensions.
+            </li>
+            <li>
+              Confirmez l'installation lorsque vous y êtes invité en cliquant
+              sur "Ajouter l'extension".
+            </li>
+            <li>
+              Une fois installée, l'icône de l'extension apparaîtra dans la
+              barre d'outils de Chrome.
+            </li>
+          </ol>
+        </div>
+
+        <h2>Comment utiliser l'extension</h2>
+        <p>
+          Une fois l'extension installée, vous pouvez l'utiliser pour capturer
+          les informations des offres d'emploi :
+        </p>
+        <ol>
+          <li>
+            Naviguez sur un site d'emploi et ouvrez une offre qui vous
+            intéresse.
+          </li>
+          <li>
+            Cliquez sur l'icône AutoApply dans la barre d'outils de Chrome.
+          </li>
+          <li>
+            L'extension détectera automatiquement les informations de l'offre
+            (titre, entreprise, lieu, description, etc.).
+          </li>
+          <li>
+            Vérifiez les informations et cliquez sur "Enregistrer" pour ajouter
+            l'offre à votre tableau de bord AutoApply.
+          </li>
+          <li>
+            Accédez à votre tableau de bord AutoApply pour voir toutes vos
+            candidatures enregistrées.
+          </li>
+        </ol>
+      </div>
+
+      <div class="text-center">
+        <a href="../landing.html" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Retour à la page d'accueil</a
+        >
+      </div>
+    </div>
+
+    <script>
+      // Gestion du thème sombre/clair
+      const currentTheme = localStorage.getItem("theme") || "light";
+      document.body.setAttribute("data-theme", currentTheme);
+    </script>
+  </body>
+</html>

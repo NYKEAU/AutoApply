@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion - AutoApply</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta
+      name="description"
+      content="Connectez-vous à AutoApply pour gérer vos candidatures"
+    />
+    <meta name="theme-color" content="#0a66c3" />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="container auth-container">
+      <header>
+        <div class="header-left">
+          <h1><i class="fas fa-briefcase"></i> AutoApply</h1>
+          <p>Gérez vos candidatures et synchronisez avec Notion</p>
+        </div>
+        <div class="header-actions">
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="Changer de thème"
+          >
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="/" class="btn secondary">Accueil</a>
+        </div>
+      </header>
+
+      <div class="auth-form-container">
+        <div class="auth-form-card">
+          <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+          <div
+            id="error-message"
+            class="error-message"
+            style="display: none"
+          ></div>
+
+          <form id="login-form" class="auth-form">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="password">Mot de passe</label>
+              <input type="password" id="password" name="password" required />
+            </div>
+            <button type="submit" class="btn primary full-width">
+              Se connecter
+            </button>
+          </form>
+
+          <div class="auth-separator">
+            <span>ou</span>
+          </div>
+
+          <button id="google-login" class="btn google-btn full-width">
+            <i class="fab fa-google"></i> Se connecter avec Google
+          </button>
+
+          <p class="auth-links">
+            Vous n'avez pas de compte ? <a href="/register">Créer un compte</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2025 AutoApply. Tous droits réservés.</p>
+        <div class="footer-links">
+          <a href="#">Confidentialité</a>
+          <a href="#">Conditions d'utilisation</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Remplacer le script inline par un script externe -->
+    <script src="js/login.js"></script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "RH Auto-Apply",
+    "version": "2.1",
+    "description": "Suivi automatique des candidatures — fonctionne sur tout site d'emploi via apprentissage par clic droit.",
+    "permissions": ["scripting", "activeTab", "storage", "contextMenus"],
+    "host_permissions": ["<all_urls>"],
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "RH Auto-Apply"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": ["content.js"],
+            "run_at": "document_idle"
+        }
+    ],
+    "content_security_policy": {
+        "extension_pages": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src http://localhost:*"
+    }
+}

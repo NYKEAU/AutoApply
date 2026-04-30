@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AutoApply</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            width: 380px;
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #05030a;
+            background-image:
+                radial-gradient(circle at 50% 50%, #1a0b2e 0%, transparent 80%),
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 100%, 100% 2px, 3px 100%;
+            color: #e0e0e0;
+        }
+
+        .scanline {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 60px;
+            background: linear-gradient(0deg, rgba(0, 255, 255, 0.03) 0%, transparent 100%);
+            pointer-events: none; z-index: 100;
+            animation: scan 8s linear infinite;
+        }
+        @keyframes scan { from { top: -100%; } to { top: 100%; } }
+
+        .header {
+            padding: 18px 20px 14px;
+            border-left: 4px solid #00ffff;
+            margin: 16px 16px 0;
+        }
+        .header-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 4px;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        }
+        .header-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem; color: #888;
+            letter-spacing: 0.1em; margin-top: 3px;
+        }
+
+        .section-box {
+            background: #0c0914;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 22px 18px 16px;
+            position: relative;
+            margin: 14px 16px;
+        }
+        .section-label {
+            position: absolute; top: -9px; left: 16px;
+            background: #05030a; padding: 0 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem; color: #00ffff;
+            text-transform: uppercase; letter-spacing: 0.1em;
+        }
+
+        input, select, textarea {
+            background: #161224;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            color: #e0e0e0;
+            font-family: 'Space Grotesk', sans-serif;
+            padding: 8px 12px; font-size: 0.8rem;
+            outline: none; width: 100%;
+            transition: border-color 0.2s;
+            border-radius: 0;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+        input::placeholder { color: #555; }
+        label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem; color: #888;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            display: block; margin-bottom: 5px;
+        }
+
+        .form-row { margin-bottom: 10px; }
+        .form-row-inline {
+            display: flex; gap: 8px; margin-bottom: 10px;
+        }
+        .form-row-inline > div { flex: 1; }
+        .form-row-inline > div.small { flex: 0 0 65px; }
+
+        .hint {
+            font-size: 0.65rem; color: #555;
+            margin-bottom: 8px; line-height: 1.4;
+        }
+
+        .btn-primary {
+            background: transparent; color: #00ffff;
+            border: 1px solid #00ffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            padding: 10px 16px; cursor: pointer; width: 100%;
+            box-shadow: inset 0 0 20px rgba(0,255,255,0.05), 0 0 15px rgba(0,255,255,0.1);
+            transition: all 0.2s;
+        }
+        .btn-primary:hover { background: rgba(0, 255, 255, 0.1); }
+
+        .btn-generate {
+            background: transparent; color: #00ff88;
+            border: 1px solid #00ff88;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            padding: 10px 16px; cursor: pointer; width: 100%;
+            box-shadow: inset 0 0 20px rgba(0,255,136,0.05), 0 0 15px rgba(0,255,136,0.1);
+            transition: all 0.2s;
+        }
+        .btn-generate:hover { background: rgba(0, 255, 136, 0.1); }
+        .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-secondary {
+            background: transparent; color: #e0e0e0;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            padding: 7px 10px; cursor: pointer; flex: 1;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover { background: rgba(0, 255, 255, 0.08); }
+        .btn-secondary.active {
+            border-color: #00ffff; color: #00ffff;
+            box-shadow: inset 0 0 15px rgba(0,255,255,0.08);
+        }
+
+        .btn-pdf {
+            background: transparent; color: #ff00ff;
+            border: 1px solid #ff00ff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            padding: 7px 10px; cursor: pointer; flex: 1;
+            box-shadow: inset 0 0 15px rgba(255,0,255,0.05);
+            transition: all 0.2s;
+        }
+        .btn-pdf:hover { background: rgba(255, 0, 255, 0.1); }
+
+        .template-row { display: flex; gap: 6px; margin-bottom: 12px; }
+
+        #lm-result { margin-top: 12px; }
+        #lm-text { font-size: 0.72rem; resize: vertical; min-height: 100px; }
+        .result-actions { display: flex; gap: 6px; margin-top: 8px; }
+
+        .status {
+            margin: 0 16px 16px; padding: 10px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem; display: none;
+            letter-spacing: 0.05em;
+        }
+        .status.success {
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+        .status.error {
+            background: rgba(255, 49, 49, 0.08);
+            border: 1px solid rgba(255, 49, 49, 0.3);
+            color: #ff3131;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                font-family: 'Times New Roman', Georgia, serif;
+                font-size: 12pt; line-height: 1.5; color: #000;
+            }
+            .print-container { padding: 40px 60px; max-width: 600px; margin: 0 auto; }
+            .print-header { text-align: left; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; }
+            .print-sender { margin-bottom: 20px; }
+            .print-sender-name { font-size: 18pt; font-weight: bold; color: #000; margin-bottom: 5px; }
+            .print-sender-contact { font-size: 11pt; color: #444; margin-bottom: 5px; }
+            .print-recipient { text-align: left; margin-bottom: 20px; }
+            .print-date { text-align: right; font-size: 11pt; color: #666; margin-bottom: 10px; }
+            .print-body { margin-bottom: 30px; line-height: 1.6; }
+            .print-salutation { font-weight: bold; margin-bottom: 15px; }
+            .print-content { margin-bottom: 20px; text-align: justify; }
+            .print-bullet { margin: 5px 0; padding-left: 20px; text-align: left; }
+            .print-signature { margin-top: 30px; }
+            .print-signature-line { border-top: 1px solid #000; margin-top: 15px; padding-top: 15px; }
+            .print-contact { font-size: 10pt; color: #444; margin-top: 5px; }
+            .print-footer { margin-top: 30px; font-size: 9pt; color: #888; text-align: center; border-top: 1px solid #ddd; padding-top: 15px; }
+            .print-hidden { display: none !important; }
+        }
+    </style>
+    <script src="popup.js" defer></script>
+</head>
+<body>
+    <div class="scanline"></div>
+
+    <div class="header">
+        <div class="header-title">AutoApply</div>
+        <div class="header-sub">Candidatures Automatiques</div>
+    </div>
+
+    <div class="section-box">
+        <span class="section-label">Profil</span>
+        <div class="form-row">
+            <label for="profile-nom">Nom complet</label>
+            <input type="text" id="profile-nom" placeholder="Prenom Nom">
+        </div>
+        <div class="form-row">
+            <label for="profile-email">Email</label>
+            <input type="email" id="profile-email" placeholder="email@exemple.com">
+        </div>
+        <div class="form-row-inline">
+            <div>
+                <label for="profile-telephone">Telephone</label>
+                <input type="tel" id="profile-telephone" placeholder="+1 (000) 000-0000">
+            </div>
+        </div>
+        <div class="form-row">
+            <label for="profile-linkedin">LinkedIn</label>
+            <input type="text" id="profile-linkedin" placeholder="linkedin.com/in/votre-profil">
+        </div>
+        <p class="hint">Utilise pour l'en-tete des lettres de motivation PDF</p>
+    </div>
+
+    <div class="section-box">
+        <span class="section-label">Auth</span>
+        <div class="form-row">
+            <label for="token">Token d'authentification</label>
+            <input type="password" id="token" placeholder="Colle ton token ici...">
+        </div>
+        <p class="hint">Copie ton token depuis le dashboard AutoApply (bouton "Token Extension")</p>
+        <button id="saveToken" class="btn-primary">Enregistrer</button>
+    </div>
+
+    <div class="section-box">
+        <span class="section-label">Lettre de Motivation</span>
+
+        <div class="form-row-inline">
+            <div>
+                <label for="lm-cv-type">Type de CV</label>
+                <select id="lm-cv-type">
+                    <option value="IT_SUPPORT">IT Support</option>
+                    <option value="COORDINATION">Coordination</option>
+                    <option value="DATA_ANALYSIS">Data Analysis</option>
+                </select>
+            </div>
+            <div>
+                <label for="lm-cv-version">Langue</label>
+                <select id="lm-cv-version">
+                    <option value="FR">Français</option>
+                    <option value="EN">Anglais</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label for="lm-entreprise">Entreprise *</label>
+            <input type="text" id="lm-entreprise" placeholder="Desjardins">
+        </div>
+
+        <div class="form-row">
+            <label for="lm-poste">Poste *</label>
+            <input type="text" id="lm-poste" placeholder="IT Support Specialist">
+        </div>
+
+        <div class="form-row">
+            <label for="lm-recruteur-nom">Nom recruteur</label>
+            <input type="text" id="lm-recruteur-nom" placeholder="Dupont">
+        </div>
+
+        <div class="form-row">
+            <label for="lm-source-offre">Source de l'offre</label>
+            <select id="lm-source-offre">
+                <option value="">-- Sélectionner --</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Indeed">Indeed</option>
+                <option value="Réseau">Réseau</option>
+                <option value="Site carrière">Site carrière</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="lm-adresse">Adresse</label>
+            <input type="text" id="lm-adresse" placeholder="1234 rue Sainte-Catherine">
+        </div>
+
+        <div class="form-row-inline">
+            <div>
+                <label for="lm-ville">Ville</label>
+                <input type="text" id="lm-ville" value="Montréal">
+            </div>
+            <div class="small">
+                <label for="lm-province">Province</label>
+                <input type="text" id="lm-province" value="QC">
+            </div>
+        </div>
+
+        <div class="template-row">
+            <button type="button" id="lm-random" class="btn-secondary active">Random</button>
+            <button type="button" class="lm-tpl-btn btn-secondary" data-index="0">T1</button>
+            <button type="button" class="lm-tpl-btn btn-secondary" data-index="1">T2</button>
+            <button type="button" class="lm-tpl-btn btn-secondary" data-index="2">T3</button>
+        </div>
+
+        <button type="button" id="lm-generate" class="btn-generate">Générer</button>
+
+        <div id="lm-result" style="display:none;">
+            <textarea id="lm-text" rows="10"></textarea>
+            <div class="result-actions">
+                <button type="button" id="lm-copy" class="btn-secondary">Copier</button>
+                <button type="button" id="lm-download" class="btn-secondary">.txt</button>
+                <button type="button" id="lm-pdf" class="btn-pdf">PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="status" class="status"></div>
+</body>
+</html>

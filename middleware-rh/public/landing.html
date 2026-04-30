@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoApply - Gérez vos candidatures facilement</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta
+      name="description"
+      content="AutoApply - Gérez vos candidatures et synchronisez avec Notion"
+    />
+    <meta name="theme-color" content="#0a66c3" />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="header-left">
+          <h1><i class="fas fa-briefcase"></i> AutoApply</h1>
+          <p>Gérez vos candidatures et synchronisez avec Notion</p>
+        </div>
+        <div class="header-actions">
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="Changer de thème"
+          >
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="/login" class="btn primary">Connexion</a>
+          <a href="/register" class="btn secondary">Inscription</a>
+        </div>
+      </header>
+
+      <section class="landing-section landing-hero">
+        <h1>Simplifiez votre recherche d'emploi</h1>
+        <p>
+          AutoApply vous aide à organiser, suivre et optimiser vos candidatures
+          professionnelles en un seul endroit.
+        </p>
+        <div class="landing-buttons">
+          <a href="/register" class="btn primary">Commencer gratuitement</a>
+          <a href="#features" class="btn secondary"
+            >Découvrir les fonctionnalités</a
+          >
+        </div>
+      </section>
+
+      <section id="features" class="landing-section landing-feature">
+        <div class="landing-feature-content">
+          <h2>Suivez vos candidatures</h2>
+          <p>
+            Gardez une trace de toutes vos candidatures, leur statut et les
+            réponses reçues. Ne manquez plus jamais une opportunité.
+          </p>
+          <div class="feature-list">
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <h3>Organisation simplifiée</h3>
+              <p>Toutes vos candidatures au même endroit</p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-chart-line"></i>
+              <h3>Statistiques détaillées</h3>
+              <p>Analysez vos performances et progressez</p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-bell"></i>
+              <h3>Rappels intelligents</h3>
+              <p>Ne manquez aucune date importante</p>
+            </div>
+          </div>
+        </div>
+        <div class="landing-feature-image">
+          <img
+            src="/images/placeholder-dashboard.svg"
+            alt="Tableau de bord AutoApply"
+            class="feature-image"
+          />
+        </div>
+      </section>
+
+      <section class="landing-section landing-feature reverse">
+        <div class="landing-feature-content">
+          <h2>Synchronisation avec Notion</h2>
+          <p>
+            Connectez AutoApply à votre base de données Notion pour garder
+            toutes vos informations synchronisées automatiquement.
+          </p>
+          <div class="feature-list">
+            <div class="feature-item">
+              <i class="fas fa-sync-alt"></i>
+              <h3>Synchronisation bidirectionnelle</h3>
+              <p>Mises à jour automatiques dans les deux sens</p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-puzzle-piece"></i>
+              <h3>Intégration transparente</h3>
+              <p>Fonctionne avec votre structure Notion existante</p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-shield-alt"></i>
+              <h3>Sécurité garantie</h3>
+              <p>Vos données restent privées et sécurisées</p>
+            </div>
+          </div>
+        </div>
+        <div class="landing-feature-image">
+          <img
+            src="/images/placeholder-notion.svg"
+            alt="Synchronisation Notion"
+            class="feature-image"
+          />
+        </div>
+      </section>
+
+      <section class="landing-section extension-section">
+        <h2>Extension Chrome</h2>
+        <div class="extension-content">
+          <div class="extension-text">
+            <p>
+              Capturez automatiquement les informations des offres d'emploi
+              pendant votre navigation avec notre extension Chrome.
+            </p>
+            <div class="extension-steps">
+              <ol>
+                <li>Installez l'extension depuis le Chrome Web Store</li>
+                <li>Naviguez sur vos sites d'emploi préférés</li>
+                <li>Capturez les offres en un clic</li>
+                <li>Retrouvez-les dans votre tableau de bord AutoApply</li>
+              </ol>
+            </div>
+            <a href="#" class="btn primary">Télécharger l'extension</a>
+          </div>
+          <div class="extension-image">
+            <img
+              src="/images/placeholder-extension.svg"
+              alt="Extension Chrome AutoApply"
+              class="feature-image"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2025 AutoApply. Tous droits réservés.</p>
+        <div class="footer-links">
+          <a href="#">Confidentialité</a>
+          <a href="#">Conditions d'utilisation</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Utiliser un fichier JavaScript externe -->
+    <script src="js/landing.js"></script>
+  </body>
+</html>

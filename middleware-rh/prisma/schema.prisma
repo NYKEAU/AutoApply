@@ -1,0 +1,19 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  uid         String   @unique // UID Firebase
+  email       String   @unique
+  displayName String?
+  photoURL    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoApply // Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="description" content="AutoApply — Gérez vos candidatures" />
+    <meta name="theme-color" content="#05030a" />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+
+    <div class="scanline"></div>
+
+    <div id="loader" class="loader" style="display: none">
+      <div class="spinner"></div>
+      <p>Chargement en cours...</p>
+    </div>
+
+    <div class="container">
+      <header>
+        <div class="header-left">
+          <h1><i class="fas fa-briefcase"></i> AutoApply</h1>
+          <p>Job tracking system // Synchronisé avec Notion</p>
+        </div>
+        <div class="header-actions">
+          <button class="theme-toggle" id="theme-toggle" aria-label="Changer de thème">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button class="settings-btn" id="settings-btn" aria-label="Paramètres">
+            <i class="fas fa-cog"></i>
+          </button>
+          <button id="logout-btn" class="btn danger">
+            <i class="fas fa-sign-out-alt"></i> Déconnexion
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-container">
+        <div class="dashboard-header">
+          <h2>// Tableau de bord</h2>
+          <div class="user-info">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <div>
+              <div class="user-name" id="user-name">Utilisateur</div>
+              <div class="user-email" id="user-email">utilisateur@example.com</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard">
+          <div class="card">
+            <i class="fas fa-list-ul"></i>
+            <h2>Candidatures</h2>
+            <p>Consultez et gérez toutes vos candidatures</p>
+            <button id="view-candidatures" class="btn primary">Voir les candidatures</button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-sync-alt"></i>
+            <h2>Notion Sync</h2>
+            <p>Synchronisez vos données avec Notion</p>
+            <button id="sync-notion" class="btn secondary">Synchroniser</button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-plus-circle"></i>
+            <h2>Nouvelle Candidature</h2>
+            <p>Enregistrez une nouvelle candidature</p>
+            <button id="new-candidature" class="btn success">Ajouter</button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-puzzle-piece"></i>
+            <h2>Token Extension</h2>
+            <p>Token pour l'extension Chrome AutoApply</p>
+            <button id="copy-extension-token" class="btn secondary">Copier le token</button>
+          </div>
+
+          <div class="card">
+            <i class="fas fa-user-circle"></i>
+            <h2>Mon Profil</h2>
+            <p>Infos personnelles pour les lettres de motivation IA</p>
+            <button id="open-profile-btn" class="btn primary">Gérer mon profil</button>
+          </div>
+        </div>
+
+        <!-- Priorités du jour -->
+        <div id="priorities-section" class="priorities-section" style="display:none;">
+          <div class="priorities-grid">
+            <div class="priority-card">
+              <div class="priority-card-header">
+                <h3>// Aujourd'hui</h3>
+                <button class="btn-link" id="edit-goal-btn">✏ Objectif</button>
+              </div>
+              <div class="daily-goal">
+                <div class="goal-counter">
+                  <span id="today-count">0</span><span class="goal-sep">/</span><span id="goal-target">5</span>
+                </div>
+                <p class="goal-label">candidatures envoyées aujourd'hui</p>
+                <div class="goal-bar"><div id="goal-progress" class="goal-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="priority-card">
+              <div class="priority-card-header">
+                <h3>// À relancer <span id="followup-badge" class="followup-badge zero">0</span></h3>
+              </div>
+              <div id="followup-list" class="followup-list">
+                <p class="empty-priorities">Aucune candidature à relancer</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div id="stats-container" class="stats-container">
+          <h2>// Statistiques</h2>
+
+          <div class="stats-filters">
+            <div class="filter-group">
+              <label for="date-filter">Période</label>
+              <select id="date-filter">
+                <option value="all">Toutes les périodes</option>
+                <option value="month">Ce mois-ci</option>
+                <option value="quarter">Ce trimestre</option>
+                <option value="year">Cette année</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="status-filter">Statut</label>
+              <select id="status-filter">
+                <option value="all">Tous les statuts</option>
+                <option value="Postulé">Postulé</option>
+                <option value="Interviewé">Interviewé</option>
+                <option value="Job refusé">Job refusé</option>
+                <option value="Job accepté">Job accepté</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="source-filter">Source</label>
+              <select id="source-filter">
+                <option value="all">Toutes les sources</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-cv-type">Type CV</label>
+              <select id="filter-cv-type">
+                <option value="all">Tous</option>
+                <option value="IT_SUPPORT">IT Support</option>
+                <option value="COORDINATION">Coordination</option>
+                <option value="DATA_ANALYSIS">Data Analysis</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-cv-version">Version CV</label>
+              <select id="filter-cv-version">
+                <option value="all">Tous</option>
+                <option value="FR">Français</option>
+                <option value="EN">Anglais</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-contact-method">Méthode</label>
+              <select id="filter-contact-method">
+                <option value="all">Toutes</option>
+                <option value="LINKEDIN_EASY_APPLY">LinkedIn Easy Apply</option>
+                <option value="MAIL_DIRECT">Mail direct</option>
+                <option value="SITE_CARRIÈRE">Site carrière</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-priority">Priorité</label>
+              <select id="filter-priority">
+                <option value="all">Toutes</option>
+                <option value="HIGH">Haute</option>
+                <option value="MEDIUM">Moyenne</option>
+                <option value="LOW">Basse</option>
+              </select>
+            </div>
+            <div class="filter-group filter-checkbox">
+              <label for="filter-follow-up-week">
+                <input type="checkbox" id="filter-follow-up-week">
+                À relancer cette semaine
+              </label>
+            </div>
+          </div>
+
+          <div class="stats-summary">
+            <div class="stat-card">
+              <i class="fas fa-file-alt"></i>
+              <h3>Total candidatures</h3>
+              <p id="total-candidatures">0</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-dollar-sign"></i>
+              <h3>Salaire moyen</h3>
+              <p id="salaire-moyen">—</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-check-circle"></i>
+              <h3>Taux de réponse</h3>
+              <p id="taux-reponse">0%</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-calendar-check"></i>
+              <h3>Ce mois-ci</h3>
+              <p id="candidatures-mois">0</p>
+            </div>
+          </div>
+
+          <div class="charts-container">
+            <div class="chart-card">
+              <h3>// Répartition des statuts</h3>
+              <div id="status-chart-container" style="height: 300px; position: relative;">
+                <canvas id="status-chart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>// Répartition par site</h3>
+              <div id="source-chart-container" style="height: 300px; position: relative;">
+                <canvas id="source-chart"></canvas>
+                <p id="source-chart-empty" style="display:none; text-align:center; color:#888; padding-top:100px; font-size:13px;">
+                  Aucune donnée de source disponible
+                </p>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>// Évolution des candidatures</h3>
+              <div id="timeline-chart-container" style="height: 300px; position: relative;">
+                <canvas id="timeline-chart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-details">
+            <h3>// Détails par statut</h3>
+            <div id="status-list" class="status-details-list"></div>
+          </div>
+
+          <div class="charts-container">
+            <div class="chart-card">
+              <h3>// Réponses par méthode de contact</h3>
+              <div id="response-by-method-container" style="height: 300px; position: relative;">
+                <canvas id="response-by-method-chart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>// Réponses par type de CV</h3>
+              <div id="response-by-cv-container" style="height: 300px; position: relative;">
+                <canvas id="response-by-cv-chart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-summary" style="margin-top: 20px;">
+            <div class="stat-card">
+              <i class="fas fa-redo"></i>
+              <h3>Relances effectuées</h3>
+              <p id="total-followups">0</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-clock"></i>
+              <h3>Délai moyen réponse</h3>
+              <p id="avg-response-time">—</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-calendar-alt"></i>
+              <h3>Entretiens planifiés</h3>
+              <p id="planned-interviews">0</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-bullseye"></i>
+              <h3>Haute priorité</h3>
+              <p id="high-priority-count">0</p>
+            </div>
+          </div>
+
+          <div class="advanced-stats" id="advanced-stats">
+            <h3>// Statistiques avancées</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Nouvelle Candidature -->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>// Nouvelle candidature</h2>
+          <form id="candidature-form">
+            <div class="form-group">
+              <label for="entreprise">Entreprise</label>
+              <input type="text" id="entreprise" name="entreprise" required placeholder="Ex: Google" />
+            </div>
+            <div class="form-group">
+              <label for="poste">Poste</label>
+              <input type="text" id="poste" name="poste" required placeholder="Ex: Développeur Backend" />
+            </div>
+            <div class="form-group">
+              <label for="statut">Statut</label>
+              <select id="statut" name="statut" required>
+                <option value="Postulé">Postulé</option>
+                <option value="Interviewé">Interviewé</option>
+                <option value="Job refusé">Job refusé</option>
+                <option value="Job accepté">Job accepté</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="salaire">Salaire (optionnel)</label>
+              <input type="text" id="salaire" name="salaire" placeholder="Ex: 45000€" />
+            </div>
+            <div class="form-group">
+              <label for="date">Date (optionnel)</label>
+              <input type="date" id="date" name="date" />
+            </div>
+            <div class="form-group">
+              <label for="location">Lieu (optionnel)</label>
+              <input type="text" id="location" name="location" placeholder="Ex: Paris" />
+            </div>
+            <div class="form-group">
+              <label for="description">Description (optionnel)</label>
+              <textarea id="description" name="description" rows="3" placeholder="Notes sur le poste..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="cv_type">Type de CV</label>
+              <select id="cv_type" name="cv_type">
+                <option value="">— Choisir —</option>
+                <option value="IT_SUPPORT">IT Support</option>
+                <option value="COORDINATION">Coordination Technique</option>
+                <option value="DATA_ANALYSIS">Data Analysis</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cv_version">Version CV</label>
+              <select id="cv_version" name="cv_version">
+                <option value="">— Choisir —</option>
+                <option value="FR">Français</option>
+                <option value="EN">Anglais</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contact_method">Méthode de contact</label>
+              <select id="contact_method" name="contact_method">
+                <option value="">— Choisir —</option>
+                <option value="LINKEDIN_EASY_APPLY">LinkedIn Easy Apply</option>
+                <option value="MAIL_DIRECT">Mail direct</option>
+                <option value="SITE_CARRIÈRE">Site carrière</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="priority">Priorité</label>
+              <select id="priority" name="priority">
+                <option value="MEDIUM">Moyenne</option>
+                <option value="HIGH">Haute</option>
+                <option value="LOW">Basse</option>
+              </select>
+            </div>
+            <button type="submit" class="btn success">Enregistrer</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Candidatures List Panel -->
+      <div id="candidatures-container" class="candidatures-container">
+        <div class="candidatures-header">
+          <h2>// Liste des Candidatures</h2>
+          <button class="close-candidatures btn danger">Fermer</button>
+        </div>
+        <div id="candidatures-list" class="candidatures-list"></div>
+      </div>
+
+      <div id="notification" class="notification"></div>
+    </div>
+
+    <!-- Chat Assistant -->
+    <div id="chat-container">
+      <div class="chat-header">
+        <h3><i class="fas fa-robot"></i> Assistant RH</h3>
+        <div class="chat-controls">
+          <button id="minimize-chat" title="Réduire"><i class="fas fa-minus"></i></button>
+          <button id="clear-chat" title="Effacer"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+      <div id="chat-messages"></div>
+      <div class="chat-suggestions">
+        <div class="suggestion-chip">Candidatures en attente</div>
+        <div class="suggestion-chip">Nombre ce mois-ci</div>
+        <div class="suggestion-chip">Salaire moyen</div>
+        <div class="suggestion-chip">Répartition statuts</div>
+        <div class="suggestion-chip">Évolution</div>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" id="chat-input" placeholder="Pose ta question..." />
+        <button id="send-chat"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2025 AutoApply. Tous droits réservés.</p>
+        <div class="footer-links">
+          <a href="#">Confidentialité</a>
+          <a href="#">Conditions d'utilisation</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/script.js"></script>
+  </body>
+</html>

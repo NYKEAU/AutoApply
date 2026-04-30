@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+*.env.local
+firebase-service-account.json
+
+# Data files (may contain PII)
+data/
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code
+.claude/
+CLAUDE.md

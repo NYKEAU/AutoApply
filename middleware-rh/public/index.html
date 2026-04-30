@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoApply</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta
+      name="description"
+      content="AutoApply - Gérez vos candidatures et synchronisez avec Notion"
+    />
+    <meta name="theme-color" content="#0a66c3" />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div id="loader" class="loader" style="display: none">
+      <div class="spinner"></div>
+      <p>Synchronisation en cours...</p>
+    </div>
+
+    <div class="container">
+      <header>
+        <div class="header-left">
+          <h1><i class="fas fa-briefcase"></i> AutoApply</h1>
+          <p>Gérez vos candidatures et synchronisez avec Notion</p>
+        </div>
+        <div class="header-actions">
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="Changer de thème"
+          >
+            <i class="fas fa-moon"></i>
+          </button>
+          <button
+            class="settings-btn"
+            id="settings-btn"
+            aria-label="Paramètres"
+          >
+            <i class="fas fa-cog"></i>
+          </button>
+          <a href="landing.html" class="btn secondary">Accueil</a>
+        </div>
+      </header>
+
+      <div class="dashboard">
+        <div class="card">
+          <i class="fas fa-list-ul"></i>
+          <h2>Candidatures</h2>
+          <p>Consultez et gérez vos candidatures</p>
+          <button id="view-candidatures" class="btn primary">
+            Voir les candidatures
+          </button>
+        </div>
+
+        <div class="card">
+          <i class="fas fa-sync-alt"></i>
+          <h2>Notion Sync</h2>
+          <p>Synchronisez vos candidatures avec Notion</p>
+          <button id="sync-notion" class="btn secondary">Synchroniser</button>
+        </div>
+
+        <div class="card">
+          <i class="fas fa-plus-circle"></i>
+          <h2>Nouvelle Candidature</h2>
+          <p>Ajoutez une nouvelle candidature</p>
+          <button id="new-candidature" class="btn success">Ajouter</button>
+        </div>
+      </div>
+
+      <div id="stats-container" class="stats-container">
+        <h2>Tableau de Bord</h2>
+
+        <div class="stats-filters">
+          <div class="filter-group">
+            <label for="date-filter">Période:</label>
+            <select id="date-filter">
+              <option value="all">Toutes les périodes</option>
+              <option value="month">Ce mois-ci</option>
+              <option value="quarter">Ce trimestre</option>
+              <option value="year">Cette année</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="status-filter">Statut:</label>
+            <select id="status-filter">
+              <option value="all">Tous les statuts</option>
+              <option value="Postulé">Postulé</option>
+              <option value="Interviewé">Interviewé</option>
+              <option value="Job refusé">Job refusé</option>
+              <option value="Job accepté">Job accepté</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="stats-summary">
+          <div class="stat-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Total de candidatures</h3>
+            <p id="total-candidatures">0</p>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-dollar-sign"></i>
+            <h3>Salaire moyen</h3>
+            <p id="salaire-moyen">Non défini</p>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-check-circle"></i>
+            <h3>Taux de réponse</h3>
+            <p id="taux-reponse">0%</p>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-calendar-check"></i>
+            <h3>Ce mois-ci</h3>
+            <p id="candidatures-mois">0</p>
+          </div>
+        </div>
+
+        <div class="charts-container">
+          <div class="chart-card">
+            <h3>Répartition des statuts</h3>
+            <div id="status-chart-container" style="height: 300px"></div>
+          </div>
+
+          <div class="chart-card">
+            <h3>Évolution des candidatures</h3>
+            <div id="timeline-chart-container" style="height: 300px"></div>
+          </div>
+        </div>
+
+        <div class="stats-details">
+          <h3>Détails par statut</h3>
+          <div id="status-list" class="status-details-list"></div>
+        </div>
+
+        <div class="advanced-stats" id="advanced-stats">
+          <h3>Statistiques avancées</h3>
+          <!-- Le contenu sera généré dynamiquement -->
+        </div>
+      </div>
+
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Ajouter une nouvelle candidature</h2>
+          <form id="candidature-form">
+            <div class="form-group">
+              <label for="entreprise">Entreprise</label>
+              <input type="text" id="entreprise" name="entreprise" required />
+            </div>
+            <div class="form-group">
+              <label for="poste">Poste</label>
+              <input type="text" id="poste" name="poste" required />
+            </div>
+            <div class="form-group">
+              <label for="statut">Statut</label>
+              <select id="statut" name="statut" required>
+                <option value="Postulé">Postulé</option>
+                <option value="Interviewé">Interviewé</option>
+                <option value="Job refusé">Job refusé</option>
+                <option value="Job accepté">Job accepté</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="salaire">Salaire (optionnel)</label>
+              <input
+                type="text"
+                id="salaire"
+                name="salaire"
+                placeholder="Ex: 45000€"
+              />
+            </div>
+            <div class="form-group">
+              <label for="date">Date (optionnel)</label>
+              <input type="date" id="date" name="date" />
+            </div>
+            <button type="submit" class="btn success">Enregistrer</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="candidatures-container" class="candidatures-container">
+        <div class="candidatures-header">
+          <h2>Liste des Candidatures</h2>
+          <button class="close-candidatures btn danger">Fermer</button>
+        </div>
+        <div id="candidatures-list" class="candidatures-list">
+          <!-- Les candidatures seront ajoutées ici dynamiquement -->
+        </div>
+      </div>
+
+      <div id="notification" class="notification"></div>
+    </div>
+
+    <div id="chat-container">
+      <div class="chat-header">
+        <h3><i class="fas fa-robot"></i> Assistant RH</h3>
+        <div class="chat-controls">
+          <button id="minimize-chat" title="Réduire">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button id="clear-chat" title="Effacer">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+      <div id="chat-messages"></div>
+      <div class="chat-suggestions">
+        <div class="suggestion-chip">Candidatures en attente</div>
+        <div class="suggestion-chip">Nombre de candidatures ce mois-ci</div>
+        <div class="suggestion-chip">Salaire moyen</div>
+        <div class="suggestion-chip">Répartition des statuts</div>
+        <div class="suggestion-chip">Évolution des candidatures</div>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" id="chat-input" placeholder="Pose ta question..." />
+        <button id="send-chat"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2025 AutoApply. Tous droits réservés.</p>
+        <div class="footer-links">
+          <a href="#">Confidentialité</a>
+          <a href="#">Conditions d'utilisation</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
