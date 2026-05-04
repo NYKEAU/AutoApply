@@ -171,7 +171,7 @@ app.use(
     origin:
       config.server.env === "production"
         ? [config.server.baseUrl, /^https:\/\/([a-z0-9-]+\.)*autoapply\.com$/]
-        : "http://localhost:3000",
+        : true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
